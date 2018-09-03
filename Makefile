@@ -32,7 +32,7 @@ simple_usage_release: clean ## Compile (release) the simple usage example
 .PHONY: unit_tests
 unit_tests: ## Run unit tests
 	mkdir -p build
-	cd build && $(TOOLCHAIN) cmake .. && make -j2
+	cd build && $(TOOLCHAIN) cmake .. && make -j2 rsvd_test
 	./build/rsvd_test
 
 .PHONY: clean
@@ -47,8 +47,7 @@ doxygen: ## Generate doxygen documentation
 .PHONY: install_eigen
 install_eigen: ## Install Eigen from source
 	wget https://bitbucket.org/eigen/eigen/get/$(eigen_version).tar.bz2 -O /tmp/eigen.tar.bz2
-	mkdir -p eigen3-src && tar -xvjf /tmp/eigen.tar.bz2 -C eigen3-src --strip-components 1
-	cd eigen3-src && mkdir -p build && cd build && cmake .. && sudo make install && cd ../..
+	mkdir -p eigen3 && tar -xvjf /tmp/eigen.tar.bz2 -C eigen3 --strip-components 1
 
 .PHONY: fmt
 fmt: ## Pretty print source code

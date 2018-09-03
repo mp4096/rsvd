@@ -1,3 +1,4 @@
+# Benchmark results
 *.csv
 .ipynb_checkpoints
 
@@ -36,4 +37,6 @@
 
 # Build
 *build
+
+# Doxygen docs
 doc

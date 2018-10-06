@@ -50,7 +50,7 @@ Then you might want to use `mp4096/rsvd` because:
   with a choice of conditioners (none, MGS, LU, QR)
 * :book: it has nice Doxygen documentation
 * :microscope: it is well-tested
-* :game_die: it offers you fine control over random number generation for the sampling matrix `Ω`,
+* :game_die: it offers you fine control over random number generation for the sampling matrix _Ω_,
   thus alleviating any potential problems with non-deterministic approximation results
   due to different PRNG seeds
 * :+1: it is written in idiomatic C++14 style

@@ -1,8 +1,6 @@
 #include <iostream>
 #include <random>
-#include <rsvd/Constants.hpp>
-#include <rsvd/ErrorEstimators.hpp>
-#include <rsvd/RandomizedSvd.hpp>
+#include <rsvd/Prelude.hpp>
 
 using Eigen::ComputeThinU;
 using Eigen::ComputeThinV;

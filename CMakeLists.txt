@@ -25,6 +25,7 @@ set(
   include/rsvd/Constants.hpp
   include/rsvd/ErrorEstimators.hpp
   include/rsvd/GramSchmidt.hpp
+  include/rsvd/Prelude.hpp
   include/rsvd/RandomizedRangeFinder.hpp
   include/rsvd/RandomizedSvd.hpp
   include/rsvd/StandardNormalRandom.hpp

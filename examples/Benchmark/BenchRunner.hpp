@@ -3,9 +3,7 @@
 
 #include <chrono>
 #include <cstdlib>
-#include <rsvd/Constants.hpp>
-#include <rsvd/ErrorEstimators.hpp>
-#include <rsvd/RandomizedSvd.hpp>
+#include <rsvd/Prelude.hpp>
 #include <sstream>
 
 #include "DataStructures.hpp"

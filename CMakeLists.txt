@@ -8,7 +8,9 @@ project(Rsvd VERSION 0.1.0 LANGUAGES CXX)
 
 include(CTest)
 
-set(RSVD_CXX_FLAGS "-std=c++14")
+set (CMAKE_CXX_STANDARD 14)
+set (CMAKE_CXX_STANDARD_REQUIRED ON)
+set (CMAKE_CXX_EXTENSIONS OFF)
 
 option(RSVD_BUILD_EXAMPLES "Build the examples" ON)
 option(RSVD_MARCH_NATIVE "Compile for the native microarchitecture" OFF)
@@ -34,7 +36,7 @@ include_directories(
 )
 
 # Flags
-set(CMAKE_CXX_FLAGS "${RSVD_CXX_FLAGS} -Wall -Wextra -pedantic -g")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DEIGEN_NO_DEBUG")
 
 # Examples

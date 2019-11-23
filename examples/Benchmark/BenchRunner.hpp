@@ -9,13 +9,6 @@
 #include "DataStructures.hpp"
 #include <Eigen/Dense>
 
-using Benchmark::BenchConfig;
-using Benchmark::RandomizedSvdConfig;
-using Eigen::ComputeThinU;
-using Eigen::ComputeThinV;
-using Eigen::Index;
-using Eigen::JacobiSVD;
-
 namespace Benchmark {
 
 template <typename MatrixType> MatrixType generateTestMatrix(const BenchConfig &conf) {
@@ -57,7 +50,8 @@ public:
 
   void run() {
     const auto tic = std::chrono::steady_clock::now();
-    JacobiSVD<MatrixType> svd(this->m_testMatrix, ComputeThinU | ComputeThinV);
+    Eigen::JacobiSVD<MatrixType> svd(this->m_testMatrix,
+                                     Eigen::ComputeThinU | Eigen::ComputeThinV);
     const auto toc = std::chrono::steady_clock::now();
 
     this->m_stats.runtime = std::chrono::duration_cast<std::chrono::milliseconds>(toc - tic);

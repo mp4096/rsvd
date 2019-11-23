@@ -60,7 +60,8 @@ TYPED_TEST(RandomizedSvd, ExactRankApproximationLuConditioner) {
 
   std::mt19937_64 randomEngine;
   randomEngine.seed(TestFixture::prngSeed);
-  Rsvd::RandomizedSvd<MatrixType, std::mt19937_64, Rsvd::SubspaceIterationConditioner::Lu> rsvd(randomEngine);
+  Rsvd::RandomizedSvd<MatrixType, std::mt19937_64, Rsvd::SubspaceIterationConditioner::Lu> rsvd(
+      randomEngine);
   rsvd.compute(m, TestFixture::rank);
   const MatrixType reconstructedRsvd =
       rsvd.matrixU() * rsvd.singularValues().asDiagonal() * rsvd.matrixV().adjoint();
@@ -83,7 +84,8 @@ TYPED_TEST(RandomizedSvd, ExactRankApproximationMgsConditioner) {
 
   std::mt19937_64 randomEngine;
   randomEngine.seed(TestFixture::prngSeed);
-  Rsvd::RandomizedSvd<MatrixType, std::mt19937_64, Rsvd::SubspaceIterationConditioner::Mgs> rsvd(randomEngine);
+  Rsvd::RandomizedSvd<MatrixType, std::mt19937_64, Rsvd::SubspaceIterationConditioner::Mgs> rsvd(
+      randomEngine);
   rsvd.compute(m, TestFixture::rank);
   const MatrixType reconstructedRsvd =
       rsvd.matrixU() * rsvd.singularValues().asDiagonal() * rsvd.matrixV().adjoint();
@@ -106,7 +108,8 @@ TYPED_TEST(RandomizedSvd, OversamplingMgsConditioner) {
 
   std::mt19937_64 randomEngine;
   randomEngine.seed(TestFixture::prngSeed);
-  Rsvd::RandomizedSvd<MatrixType, std::mt19937_64, Rsvd::SubspaceIterationConditioner::Mgs> rsvd(randomEngine);
+  Rsvd::RandomizedSvd<MatrixType, std::mt19937_64, Rsvd::SubspaceIterationConditioner::Mgs> rsvd(
+      randomEngine);
   // Oversample (twice the rank)
   rsvd.compute(m, TestFixture::rank, TestFixture::rank);
   const MatrixType reconstructedRsvd =

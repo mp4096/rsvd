@@ -15,6 +15,32 @@ namespace {
 constexpr auto kTab{"  "};
 }
 
+template <typename MatrixType>
+void jacobiSvdRun(const BenchConfig &benchConf, std::stringstream &ss) {
+  std::cout << kTab << "Jacobi SVD" << std::endl;
+  auto b{BenchRunnerSvd<MatrixType>(benchConf)};
+  b.run();
+  std::cout << kTab << kTab;
+  b.displayResults();
+  ss << "jacobi svd," << getMatrixTypeName<MatrixType>() << ",";
+  b.pushAsCsv(ss);
+  ss << std::endl;
+}
+
+template <typename MatrixType, Rsvd::SubspaceIterationConditioner Conditioner>
+void randomizedSvdRun(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdConf,
+                      std::stringstream &ss) {
+  std::cout << kTab << "Randomized SVD, " << getConditionerName<Conditioner>() << std::endl;
+  auto b{BenchRunnerRandomizedSvd<MatrixType, Conditioner>(benchConf, rsvdConf)};
+  b.run();
+  std::cout << kTab << kTab;
+  b.displayResults();
+  ss << "randomized svd : " << getConditionerName<Conditioner>() << ","
+     << getMatrixTypeName<MatrixType>() << ",";
+  b.pushAsCsv(ss);
+  ss << std::endl;
+}
+
 template <typename T>
 void benchHelper(const BenchConfig &, const RandomizedSvdConfig &, std::stringstream &) {}
 
@@ -23,64 +49,11 @@ void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdCo
                  std::stringstream &ss) {
   std::cout << "Using numerical type " << getMatrixTypeName<Head>() << std::endl;
 
-  {
-    std::cout << kTab << "Jacobi SVD" << std::endl;
-    auto b{BenchRunnerSvd<Head>(benchConf)};
-    b.run();
-    std::cout << kTab << kTab;
-    b.displayResults();
-    ss << "jacobi svd," << getMatrixTypeName<Head>() << ",";
-    b.pushAsCsv(ss);
-    ss << std::endl;
-  }
-
-  {
-    std::cout << kTab << "Randomized SVD, no conditioner" << std::endl;
-    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::SubspaceIterationConditioner::None>(benchConf,
-                                                                                    rsvdConf)};
-    b.run();
-    std::cout << kTab << kTab;
-    b.displayResults();
-    ss << "randomized svd : no conditioner," << getMatrixTypeName<Head>() << ",";
-    b.pushAsCsv(ss);
-    ss << std::endl;
-  }
-
-  {
-    std::cout << kTab << "Randomized SVD, LU conditioner" << std::endl;
-    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::SubspaceIterationConditioner::Lu>(benchConf,
-                                                                                  rsvdConf)};
-    b.run();
-    std::cout << kTab << kTab;
-    b.displayResults();
-    ss << "randomized svd : lu conditioner," << getMatrixTypeName<Head>() << ",";
-    b.pushAsCsv(ss);
-    ss << std::endl;
-  }
-
-  {
-    std::cout << kTab << "Randomized SVD, MGS conditioner" << std::endl;
-    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::SubspaceIterationConditioner::Mgs>(benchConf,
-                                                                                   rsvdConf)};
-    b.run();
-    std::cout << kTab << kTab;
-    b.displayResults();
-    ss << "randomized svd : mgs conditioner," << getMatrixTypeName<Head>() << ",";
-    b.pushAsCsv(ss);
-    ss << std::endl;
-  }
-
-  {
-    std::cout << kTab << "Randomized SVD, QR conditioner" << std::endl;
-    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::SubspaceIterationConditioner::Qr>(benchConf,
-                                                                                  rsvdConf)};
-    b.run();
-    std::cout << kTab << kTab;
-    b.displayResults();
-    ss << "randomized svd : qr conditioner," << getMatrixTypeName<Head>() << ",";
-    b.pushAsCsv(ss);
-    ss << std::endl;
-  }
+  jacobiSvdRun<Head>(benchConf, ss);
+  randomizedSvdRun<Head, Rsvd::SubspaceIterationConditioner::None>(benchConf, rsvdConf, ss);
+  randomizedSvdRun<Head, Rsvd::SubspaceIterationConditioner::Lu>(benchConf, rsvdConf, ss);
+  randomizedSvdRun<Head, Rsvd::SubspaceIterationConditioner::Mgs>(benchConf, rsvdConf, ss);
+  randomizedSvdRun<Head, Rsvd::SubspaceIterationConditioner::Qr>(benchConf, rsvdConf, ss);
 
   benchHelper<T, Tail...>(benchConf, rsvdConf, ss);
 }

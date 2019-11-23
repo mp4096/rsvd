@@ -9,8 +9,6 @@
 
 #include <Eigen/Dense>
 
-using Eigen::Index;
-
 namespace Benchmark {
 
 template <typename T> struct BenchStats {
@@ -29,8 +27,8 @@ template <typename T> struct BenchStats {
 };
 
 struct RandomizedSvdConfig {
-  Index rank;
-  Index oversampling;
+  Eigen::Index rank;
+  Eigen::Index oversampling;
   unsigned int numIter;
   unsigned int prngSeed;
 
@@ -46,9 +44,9 @@ struct RandomizedSvdConfig {
 };
 
 struct BenchConfig {
-  Index numCols;
-  Index numRows;
-  Index rank;
+  Eigen::Index numCols;
+  Eigen::Index numRows;
+  Eigen::Index rank;
   unsigned int prngSeed;
 
   void display() const {

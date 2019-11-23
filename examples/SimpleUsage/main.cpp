@@ -14,7 +14,7 @@ int main() {
   const Index reducedRank{50};
 
   // Initialize PRNG for the Eigen random matrix generation
-  std::srand((unsigned int)777);
+  std::srand(static_cast<unsigned int>(777));
   const MatrixXd x{MatrixXd::Random(numRows, numCols)};
 
   // Jacobi SVD

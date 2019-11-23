@@ -23,8 +23,8 @@ namespace Rsvd {
 template <typename MatrixType>
 typename Eigen::NumTraits<typename MatrixType::Scalar>::Real
 relativeFrobeniusNormError(const MatrixType &reference, const MatrixType &approximation) {
-  const auto differenceNorm = (approximation - reference).norm();
-  const auto referenceNorm = reference.norm();
+  const auto differenceNorm{(approximation - reference).norm()};
+  const auto referenceNorm{reference.norm()};
 
   assert(referenceNorm > 0);
 

@@ -99,7 +99,7 @@ public:
   /// \brief Create an object for the randomized singular value decomposition.
   ///
   /// \param engine Random engine to use for sampling from standard normal distribution.
-  explicit RandomizedSvd(RandomEngineType &engine) : m_randomEngine(engine){};
+  explicit RandomizedSvd(RandomEngineType &engine) : m_randomEngine{engine} {};
 
   /// \brief Return the vector of singular values.
   MatrixType singularValues() const { return m_singularValues; }
@@ -117,22 +117,22 @@ public:
   /// \param numIter Number of randomized subspace iterations. Increase it to improve
   /// the approximation. Default value: 2.
   void compute(const MatrixType &a, const Index rank, const Index oversamples = 5,
-               const unsigned int numIter = 2) {
+               const unsigned int numIter = 2U) {
     using Rsvd::Internal::RandomizedSubspaceIterations;
     using Rsvd::Internal::singleShot;
 
     /// \todo Handle matrices with m < n correctly.
 
-    const Index matrixShortSize = min(a.rows(), a.cols());
-    const Index rangeApproximationDim = min(matrixShortSize, rank + oversamples);
+    const Index matrixShortSize{min(a.rows(), a.cols())};
+    const Index rangeApproximationDim{min(matrixShortSize, rank + oversamples)};
 
-    const MatrixType q =
-        (numIter == 0)
+    const MatrixType q{
+        (numIter == 0U)
             ? singleShot<MatrixType, RandomEngineType>(a, rangeApproximationDim, m_randomEngine)
             : RandomizedSubspaceIterations<MatrixType, RandomEngineType, Conditioner>::compute(
-                  a, rangeApproximationDim, numIter, m_randomEngine);
+                  a, rangeApproximationDim, numIter, m_randomEngine)};
 
-    const auto b = q.adjoint() * a;
+    const auto b{q.adjoint() * a};
     JacobiSVD<MatrixType> svd(b, ComputeThinU | ComputeThinV);
 
     m_leftSingularVectors.noalias() = q * svd.matrixU().leftCols(rank);
@@ -142,7 +142,9 @@ public:
 
 private:
   RandomEngineType &m_randomEngine;
-  MatrixType m_leftSingularVectors, m_singularValues, m_rightSingularVectors;
+  MatrixType m_leftSingularVectors{};
+  MatrixType m_singularValues{};
+  MatrixType m_rightSingularVectors{};
 };
 
 } // namespace Rsvd

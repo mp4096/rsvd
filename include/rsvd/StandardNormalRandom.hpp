@@ -39,7 +39,7 @@ struct StandardNormalRandomHelper<MatrixType, RealType<MatrixType>, RandomEngine
     // Create a standard normal distribution with zero mean (mu = 0) and unity variance (sigma^2 =
     // 1)
     std::normal_distribution<RealType<MatrixType>> distribution{0, 1};
-    auto normal = [&](typename MatrixType::Scalar) { return distribution(engine); };
+    const auto normal{[&](typename MatrixType::Scalar) { return distribution(engine); }};
     return MatrixType::NullaryExpr(numRows, numCols, normal);
   }
 };
@@ -55,9 +55,9 @@ struct StandardNormalRandomHelper<MatrixType, std::complex<RealType<MatrixType>>
     // 1/sqrt(2)
     const RealType<MatrixType> stdDev = 1 / sqrt(2);
     std::normal_distribution<RealType<MatrixType>> distribution{0, stdDev};
-    auto complexNormal = [&](typename MatrixType::Scalar) {
+    const auto complexNormal{[&](typename MatrixType::Scalar) {
       return std::complex<RealType<MatrixType>>(distribution(engine), distribution(engine));
-    };
+    }};
     return MatrixType::NullaryExpr(numRows, numCols, complexNormal);
   }
 };

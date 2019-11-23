@@ -35,10 +35,10 @@ template <typename MatrixType, typename RandomEngineType>
 MatrixType singleShot(const MatrixType &a, const Index dim, RandomEngineType &engine) {
   using Internal::standardNormalRandom;
 
-  const auto numRows = a.rows();
-  const auto numCols = a.cols();
+  const auto numRows{a.rows()};
+  const auto numCols{a.cols()};
 
-  MatrixType result = a * standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine);
+  MatrixType result{a * standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine)};
 
   ColPivHouseholderQR<Ref<MatrixType>> qr(result);
   result.noalias() = qr.householderQ() * MatrixType::Identity(numRows, dim);
@@ -80,14 +80,14 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
 
     assert(numIter > 0);
 
-    const auto numRows = a.rows();
-    const auto numCols = a.cols();
+    const auto numRows{a.rows()};
+    const auto numCols{a.cols()};
 
-    MatrixType tmpRows =
-        a * standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine);
+    MatrixType tmpRows{a *
+                       standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine)};
     MatrixType tmpCols(numCols, dim);
 
-    for (unsigned int j = 0; j < numIter; ++j) {
+    for (unsigned int j{0U}; j < numIter; ++j) {
       tmpCols.noalias() = a.adjoint() * tmpRows;
       tmpRows.noalias() = a * tmpCols;
     }
@@ -116,13 +116,13 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
 
     assert(numIter > 0);
 
-    const auto numRows = a.rows();
-    const auto numCols = a.cols();
+    const auto numRows{a.rows()};
+    const auto numCols{a.cols()};
 
-    MatrixType tmpCols = standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine);
+    MatrixType tmpCols{standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine)};
     MatrixType tmpRows(numRows, dim);
 
-    for (unsigned int j = 0; j < numIter; ++j) {
+    for (unsigned int j{0U}; j < numIter; ++j) {
       tmpRows.noalias() = a * tmpCols;
       FullPivLU<Ref<MatrixType>> luRows(tmpRows);
       tmpRows.diagonal().setOnes();
@@ -157,13 +157,13 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
 
     assert(numIter > 0);
 
-    const auto numRows = a.rows();
-    const auto numCols = a.cols();
+    const auto numRows{a.rows()};
+    const auto numCols{a.cols()};
 
-    MatrixType tmpCols = standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine);
+    MatrixType tmpCols{standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine)};
     MatrixType tmpRows(numRows, dim);
 
-    for (unsigned int j = 0; j < numIter; ++j) {
+    for (unsigned int j{0U}; j < numIter; ++j) {
       tmpRows.noalias() = a * tmpCols;
       modifiedGramSchmidt(tmpRows);
 
@@ -190,13 +190,13 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
 
     assert(numIter > 0);
 
-    const auto numRows = a.rows();
-    const auto numCols = a.cols();
+    const auto numRows{a.rows()};
+    const auto numCols{a.cols()};
 
-    MatrixType tmpCols = standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine);
+    MatrixType tmpCols{standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine)};
     MatrixType tmpRows(numRows, dim);
 
-    for (unsigned int j = 0; j < numIter; ++j) {
+    for (unsigned int j{0U}; j < numIter; ++j) {
       tmpRows.noalias() = a * tmpCols;
       ColPivHouseholderQR<Ref<MatrixType>> qrRows(tmpRows);
 

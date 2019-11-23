@@ -3,28 +3,23 @@
 
 #include <Eigen/Dense>
 
-using Eigen::MatrixXcd;
-using Eigen::MatrixXcf;
-using Eigen::MatrixXd;
-using Eigen::MatrixXf;
-
 namespace Benchmark {
 
 template <typename T> struct MatrixTypeName { static const char *get(); };
 
-template <> struct MatrixTypeName<MatrixXf> {
+template <> struct MatrixTypeName<Eigen::MatrixXf> {
   static const char *get() { return "float"; }
 };
 
-template <> struct MatrixTypeName<MatrixXd> {
+template <> struct MatrixTypeName<Eigen::MatrixXd> {
   static const char *get() { return "double"; }
 };
 
-template <> struct MatrixTypeName<MatrixXcf> {
+template <> struct MatrixTypeName<Eigen::MatrixXcf> {
   static const char *get() { return "complex float"; }
 };
 
-template <> struct MatrixTypeName<MatrixXcd> {
+template <> struct MatrixTypeName<Eigen::MatrixXcd> {
   static const char *get() { return "complex double"; }
 };
 

@@ -37,5 +37,5 @@ script:
   - mkdir -p build
   - cd build
   - cmake -D Eigen3_INCLUDE_DIR="../eigen3/" -D RSVD_OPENMP=OFF ..
-  - make rsvd_test
+  - make all
   - ./rsvd_test

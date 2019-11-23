@@ -72,7 +72,8 @@ struct RandomizedSubspaceIterations {
 
 /// \brief Partial specialization for subspace iterations without a conditioner.
 template <typename MatrixType, typename RandomEngineType>
-struct RandomizedSubspaceIterations<MatrixType, RandomEngineType, NoConditioner> {
+struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
+                                    SubspaceIterationConditioner::None> {
   static MatrixType compute(const MatrixType &a, const Index dim, const unsigned int numIter,
                             RandomEngineType &engine) {
     using Internal::standardNormalRandom;
@@ -107,7 +108,8 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType, NoConditioner>
 ///
 /// After the decomposition, \f$P^{-1} L\f$ is used for further iterations instead of \f$M\f$.
 template <typename MatrixType, typename RandomEngineType>
-struct RandomizedSubspaceIterations<MatrixType, RandomEngineType, LuConditioner> {
+struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
+                                    SubspaceIterationConditioner::Lu> {
   static MatrixType compute(const MatrixType &a, const Index dim, const unsigned int numIter,
                             RandomEngineType &engine) {
     using Internal::standardNormalRandom;
@@ -146,7 +148,8 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType, LuConditioner>
 /// \brief Partial specialization for subspace iterations with the modified Gram--Schmidt process
 /// for conditioning.
 template <typename MatrixType, typename RandomEngineType>
-struct RandomizedSubspaceIterations<MatrixType, RandomEngineType, MgsConditioner> {
+struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
+                                    SubspaceIterationConditioner::Mgs> {
   static MatrixType compute(const MatrixType &a, const Index dim, const unsigned int numIter,
                             RandomEngineType &engine) {
     using Internal::modifiedGramSchmidt;
@@ -179,7 +182,8 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType, MgsConditioner
 /// \brief Partial specialization for subspace iterations with the QR decomposition for
 /// conditioning.
 template <typename MatrixType, typename RandomEngineType>
-struct RandomizedSubspaceIterations<MatrixType, RandomEngineType, QrConditioner> {
+struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
+                                    SubspaceIterationConditioner::Qr> {
   static MatrixType compute(const MatrixType &a, const Index dim, const unsigned int numIter,
                             RandomEngineType &engine) {
     using Internal::standardNormalRandom;

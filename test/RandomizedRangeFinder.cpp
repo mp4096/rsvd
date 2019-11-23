@@ -8,16 +8,14 @@
 #include <rsvd/RandomizedRangeFinder.hpp>
 
 using Eigen::Index;
-using Rsvd::LuConditioner;
-using Rsvd::MgsConditioner;
-using Rsvd::NoConditioner;
-using Rsvd::QrConditioner;
+using Rsvd::SubspaceIterationConditioner;
 using Rsvd::Internal::RandomizedSubspaceIterations;
 using Rsvd::Internal::singleShot;
 
-// Note: Tolerances for the range approximation (tests "{SingleShot, NoConditioner, LuConditioner,
-// MgsConditioner, QrConditioner}Approximation") were chosen after several runs with different PRNG
-// seeds (444, 555, 666, 777).
+// Note: Tolerances for the range approximation (tests "{SingleShot,
+// SubspaceIterationConditioner::None, SubspaceIterationConditioner::Lu,
+// SubspaceIterationConditioner::Mgs, SubspaceIterationConditioner::Qr}Approximation") were
+// chosen after several runs with different PRNG seeds (444, 555, 666, 777).
 
 template <typename T> struct RandomizedRangeFinder : public ::testing::Test {
   using MatrixType = Eigen::Matrix<T, Eigen::Dynamic, Eigen::Dynamic>;
@@ -112,9 +110,10 @@ TYPED_TEST(RandomizedRangeFinder, NoConditionerNorm) {
   const MatrixType a = MatrixType::Random(TestFixture::numRows, TestFixture::dim) *
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
-  const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, NoConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+  const MatrixType q = RandomizedSubspaceIterations<
+      MatrixType, std::mt19937_64,
+      SubspaceIterationConditioner::None>::compute(a, TestFixture::dim + TestFixture::oversampling,
+                                                   TestFixture::numIter, randomEngine);
 
   for (Index i = 0; i < TestFixture::dim; ++i) {
     ASSERT_NEAR(q.col(i).norm(), 1, 2 * TestFixture::macheps);
@@ -133,9 +132,10 @@ TYPED_TEST(RandomizedRangeFinder, NoConditionerOrthogonality) {
   const MatrixType a = MatrixType::Random(TestFixture::numRows, TestFixture::dim) *
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
-  const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, NoConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+  const MatrixType q = RandomizedSubspaceIterations<
+      MatrixType, std::mt19937_64,
+      SubspaceIterationConditioner::None>::compute(a, TestFixture::dim + TestFixture::oversampling,
+                                                   TestFixture::numIter, randomEngine);
 
   for (Index i = 0; i < TestFixture::dim; ++i) {
     for (Index j = 0; j < i; ++j) {
@@ -157,9 +157,10 @@ TYPED_TEST(RandomizedRangeFinder, NoConditionerApproximation) {
   const MatrixType a = MatrixType::Random(TestFixture::numRows, TestFixture::dim) *
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
-  const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, NoConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+  const MatrixType q = RandomizedSubspaceIterations<
+      MatrixType, std::mt19937_64,
+      SubspaceIterationConditioner::None>::compute(a, TestFixture::dim + TestFixture::oversampling,
+                                                   TestFixture::numIter, randomEngine);
   const MatrixType res = a - q * (q.adjoint() * a);
   ASSERT_NEAR(res.norm(), 0, 1e6 * TestFixture::macheps);
 }
@@ -177,8 +178,9 @@ TYPED_TEST(RandomizedRangeFinder, LuConditionerNorm) {
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
   const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, LuConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, SubspaceIterationConditioner::Lu>::
+          compute(a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter,
+                  randomEngine);
 
   for (Index i = 0; i < TestFixture::dim; ++i) {
     ASSERT_NEAR(q.col(i).norm(), 1, 2 * TestFixture::macheps);
@@ -198,8 +200,9 @@ TYPED_TEST(RandomizedRangeFinder, LuConditionerOrthogonality) {
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
   const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, LuConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, SubspaceIterationConditioner::Lu>::
+          compute(a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter,
+                  randomEngine);
 
   for (Index i = 0; i < TestFixture::dim; ++i) {
     for (Index j = 0; j < i; ++j) {
@@ -222,8 +225,9 @@ TYPED_TEST(RandomizedRangeFinder, LuConditionerApproximation) {
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
   const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, LuConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, SubspaceIterationConditioner::Lu>::
+          compute(a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter,
+                  randomEngine);
   const MatrixType res = a - q * (q.adjoint() * a);
   ASSERT_NEAR(res.norm(), 0, 4e2 * TestFixture::macheps);
 }
@@ -240,9 +244,10 @@ TYPED_TEST(RandomizedRangeFinder, MgsConditionerNorm) {
   const MatrixType a = MatrixType::Random(TestFixture::numRows, TestFixture::dim) *
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
-  const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, MgsConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+  const MatrixType q = RandomizedSubspaceIterations<
+      MatrixType, std::mt19937_64,
+      SubspaceIterationConditioner::Mgs>::compute(a, TestFixture::dim + TestFixture::oversampling,
+                                                  TestFixture::numIter, randomEngine);
 
   for (Index i = 0; i < TestFixture::dim; ++i) {
     ASSERT_NEAR(q.col(i).norm(), 1, 2 * TestFixture::macheps);
@@ -261,9 +266,10 @@ TYPED_TEST(RandomizedRangeFinder, MgsConditionerOrthogonality) {
   const MatrixType a = MatrixType::Random(TestFixture::numRows, TestFixture::dim) *
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
-  const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, MgsConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+  const MatrixType q = RandomizedSubspaceIterations<
+      MatrixType, std::mt19937_64,
+      SubspaceIterationConditioner::Mgs>::compute(a, TestFixture::dim + TestFixture::oversampling,
+                                                  TestFixture::numIter, randomEngine);
 
   for (Index i = 0; i < TestFixture::dim; ++i) {
     for (Index j = 0; j < i; ++j) {
@@ -285,9 +291,10 @@ TYPED_TEST(RandomizedRangeFinder, MgsConditionerApproximation) {
   const MatrixType a = MatrixType::Random(TestFixture::numRows, TestFixture::dim) *
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
-  const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, MgsConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+  const MatrixType q = RandomizedSubspaceIterations<
+      MatrixType, std::mt19937_64,
+      SubspaceIterationConditioner::Mgs>::compute(a, TestFixture::dim + TestFixture::oversampling,
+                                                  TestFixture::numIter, randomEngine);
   const MatrixType res = a - q * (q.adjoint() * a);
   ASSERT_NEAR(res.norm(), 0, 3e2 * TestFixture::macheps);
 }
@@ -305,8 +312,9 @@ TYPED_TEST(RandomizedRangeFinder, QrConditionerNorm) {
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
   const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, QrConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, SubspaceIterationConditioner::Qr>::
+          compute(a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter,
+                  randomEngine);
 
   for (Index i = 0; i < TestFixture::dim; ++i) {
     ASSERT_NEAR(q.col(i).norm(), 1, 2 * TestFixture::macheps);
@@ -326,8 +334,9 @@ TYPED_TEST(RandomizedRangeFinder, QrConditionerOrthogonality) {
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
   const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, QrConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, SubspaceIterationConditioner::Qr>::
+          compute(a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter,
+                  randomEngine);
 
   for (Index i = 0; i < TestFixture::dim; ++i) {
     for (Index j = 0; j < i; ++j) {
@@ -350,8 +359,9 @@ TYPED_TEST(RandomizedRangeFinder, QrConditionerApproximation) {
                        MatrixType::Random(TestFixture::dim, TestFixture::numCols);
   // Compute the randomized range approximation
   const MatrixType q =
-      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, QrConditioner>::compute(
-          a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter, randomEngine);
+      RandomizedSubspaceIterations<MatrixType, std::mt19937_64, SubspaceIterationConditioner::Qr>::
+          compute(a, TestFixture::dim + TestFixture::oversampling, TestFixture::numIter,
+                  randomEngine);
   const MatrixType res = a - q * (q.adjoint() * a);
   ASSERT_NEAR(res.norm(), 0, 3e2 * TestFixture::macheps);
 }

@@ -13,8 +13,9 @@ namespace Internal {
 
 /// \brief Orthonormalize matrix columns inplace. Deflate if needed.
 ///
-/// \warning This is a self-implemented algorithm, use it with caution. Use #LuConditioner or
-/// #QrConditioner if numerical stability and implementation quality is important.
+/// \warning This is a self-implemented algorithm, use it with caution. Use
+/// #Rsvd::SubspaceIterationConditioner::Lu or #Rsvd::SubspaceIterationConditioner::Qr if numerical
+/// stability and implementation quality is important.
 ///
 /// \long This function implements the modified Gram--Schmidt process with deflation.
 ///

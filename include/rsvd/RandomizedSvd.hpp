@@ -74,11 +74,14 @@ namespace Rsvd {
 /// ```cpp
 /// const MatrixXd a = ... ;
 ///
-/// std::mt19937_64 randomEngine;
+/// std::mt19937_64 randomEngine{};
 /// randomEngine.seed(777);
 ///
-/// Rsvd::RandomizedSvd<MatrixXd, std::mt19937_64, Rsvd::LuConditioner>
-/// rsvd(randomEngine); rsvd.compute(a, reducedRank);
+/// Rsvd::RandomizedSvd<MatrixXd, std::mt19937_64, Rsvd::SubspaceIterationConditioner::Lu>
+/// rsvd(randomEngine);
+///
+/// rsvd.compute(a, reducedRank);
+///
 /// // Recover matrix a
 /// const MatrixXd rsvdApprox =
 ///     rsvd.matrixU() * rsvd.singularValues().asDiagonal() *
@@ -89,7 +92,7 @@ namespace Rsvd {
 /// \tparam RandomEngineType Type of the random engine, e.g. \c std::default_random_engine or \c
 /// std::mt19937_64.
 /// \tparam Conditioner Which conditioner to use for subspace iterations, see
-/// #SubspaceIterationConditioner.
+/// #Rsvd::SubspaceIterationConditioner.
 template <typename MatrixType, typename RandomEngineType, SubspaceIterationConditioner Conditioner>
 class RandomizedSvd {
 public:

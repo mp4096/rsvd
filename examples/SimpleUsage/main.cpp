@@ -29,7 +29,8 @@ int main() {
   std::mt19937_64 randomEngine{};
   randomEngine.seed(777);
 
-  Rsvd::RandomizedSvd<MatrixXd, std::mt19937_64, Rsvd::LuConditioner> rsvd(randomEngine);
+  Rsvd::RandomizedSvd<MatrixXd, std::mt19937_64, Rsvd::SubspaceIterationConditioner::Lu> rsvd(
+      randomEngine);
   rsvd.compute(x, reducedRank);
   const MatrixXd rsvdApprox{rsvd.matrixU() * rsvd.singularValues().asDiagonal() *
                             rsvd.matrixV().adjoint()};

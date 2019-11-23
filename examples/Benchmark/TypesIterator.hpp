@@ -36,7 +36,8 @@ void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdCo
 
   {
     std::cout << kTab << "Randomized SVD, no conditioner" << std::endl;
-    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::NoConditioner>(benchConf, rsvdConf)};
+    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::SubspaceIterationConditioner::None>(benchConf,
+                                                                                    rsvdConf)};
     b.run();
     std::cout << kTab << kTab;
     b.displayResults();
@@ -47,7 +48,8 @@ void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdCo
 
   {
     std::cout << kTab << "Randomized SVD, LU conditioner" << std::endl;
-    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::LuConditioner>(benchConf, rsvdConf)};
+    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::SubspaceIterationConditioner::Lu>(benchConf,
+                                                                                  rsvdConf)};
     b.run();
     std::cout << kTab << kTab;
     b.displayResults();
@@ -58,7 +60,8 @@ void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdCo
 
   {
     std::cout << kTab << "Randomized SVD, MGS conditioner" << std::endl;
-    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::MgsConditioner>(benchConf, rsvdConf)};
+    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::SubspaceIterationConditioner::Mgs>(benchConf,
+                                                                                   rsvdConf)};
     b.run();
     std::cout << kTab << kTab;
     b.displayResults();
@@ -69,7 +72,8 @@ void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdCo
 
   {
     std::cout << kTab << "Randomized SVD, QR conditioner" << std::endl;
-    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::QrConditioner>(benchConf, rsvdConf)};
+    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::SubspaceIterationConditioner::Qr>(benchConf,
+                                                                                  rsvdConf)};
     b.run();
     std::cout << kTab << kTab;
     b.displayResults();

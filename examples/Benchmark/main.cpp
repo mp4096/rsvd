@@ -17,9 +17,9 @@ using Eigen::MatrixXd;
 using Eigen::MatrixXf;
 
 int main() {
-  const unsigned int numRuns = 10;
-  const unsigned int maxNumIter = 4;
-  const auto sizes = std::vector<Index>{200, 500, 1000, 2000};
+  const unsigned int numRuns{10U};
+  const unsigned int maxNumIter{4U};
+  const auto sizes{std::vector<Index>{200, 500, 1000, 2000}};
 
   std::stringstream resultsStream;
   resultsStream << "algo,"
@@ -35,11 +35,11 @@ int main() {
                 << "error,"
                 << "runtime" << std::endl;
 
-  for (unsigned int runIdx = 0; runIdx < numRuns; ++runIdx) {
+  for (unsigned int runIdx{0U}; runIdx < numRuns; ++runIdx) {
     std::cout << "Run " << runIdx + 1 << " out of " << numRuns << std::endl;
-    for (unsigned int numIter = 0; numIter < (maxNumIter + 1); ++numIter) {
-      for (Index size : sizes) {
-        const BenchConfig benchConf = {
+    for (unsigned int numIter{0U}; numIter < (maxNumIter + 1); ++numIter) {
+      for (const Index size : sizes) {
+        const BenchConfig benchConf{
             size,         // numRows
             size / 2,     // numCols
             size / 4,     // rank
@@ -47,7 +47,7 @@ int main() {
         };
         benchConf.display();
 
-        const RandomizedSvdConfig rsvdConf = {
+        const RandomizedSvdConfig rsvdConf{
             size / 4,     // rank
             10,           // oversampling
             numIter,      // numIter

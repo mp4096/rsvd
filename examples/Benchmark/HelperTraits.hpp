@@ -5,23 +5,17 @@
 
 namespace Benchmark {
 
-template <typename T> struct MatrixTypeName { static const char *get(); };
-
-template <> struct MatrixTypeName<Eigen::MatrixXf> {
-  static const char *get() { return "float"; }
-};
-
-template <> struct MatrixTypeName<Eigen::MatrixXd> {
-  static const char *get() { return "double"; }
-};
-
-template <> struct MatrixTypeName<Eigen::MatrixXcf> {
-  static const char *get() { return "complex float"; }
-};
-
-template <> struct MatrixTypeName<Eigen::MatrixXcd> {
-  static const char *get() { return "complex double"; }
-};
+template <typename T> inline constexpr auto getMatrixTypeName() noexcept;
+template <> inline constexpr auto getMatrixTypeName<Eigen::MatrixXf>() noexcept { return "float"; }
+template <> inline constexpr auto getMatrixTypeName<Eigen::MatrixXd>() noexcept {
+  return "double";
+}
+template <> inline constexpr auto getMatrixTypeName<Eigen::MatrixXcf>() noexcept {
+  return "complex float";
+}
+template <> inline constexpr auto getMatrixTypeName<Eigen::MatrixXcd>() noexcept {
+  return "complex double";
+}
 
 } // namespace Benchmark
 

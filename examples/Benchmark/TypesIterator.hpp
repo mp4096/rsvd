@@ -19,14 +19,14 @@ void benchHelper(const BenchConfig &, const RandomizedSvdConfig &, std::stringst
 template <typename T, typename Head, typename... Tail>
 void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdConf,
                  std::stringstream &ss) {
-  std::cout << "Using numerical type " << MatrixTypeName<Head>::get() << std::endl;
+  std::cout << "Using numerical type " << getMatrixTypeName<Head>() << std::endl;
 
   std::cout << tab << "Jacobi SVD" << std::endl;
   auto b1 = BenchRunnerSvd<Head>(benchConf);
   b1.run();
   std::cout << tab << tab;
   b1.displayResults();
-  ss << "jacobi svd," << MatrixTypeName<Head>::get() << ",";
+  ss << "jacobi svd," << getMatrixTypeName<Head>() << ",";
   b1.pushAsCsv(ss);
   ss << std::endl;
 
@@ -35,7 +35,7 @@ void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdCo
   b2.run();
   std::cout << tab << tab;
   b2.displayResults();
-  ss << "randomized svd : no conditioner," << MatrixTypeName<Head>::get() << ",";
+  ss << "randomized svd : no conditioner," << getMatrixTypeName<Head>() << ",";
   b2.pushAsCsv(ss);
   ss << std::endl;
 
@@ -44,7 +44,7 @@ void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdCo
   b3.run();
   std::cout << tab << tab;
   b3.displayResults();
-  ss << "randomized svd : lu conditioner," << MatrixTypeName<Head>::get() << ",";
+  ss << "randomized svd : lu conditioner," << getMatrixTypeName<Head>() << ",";
   b3.pushAsCsv(ss);
   ss << std::endl;
 
@@ -53,7 +53,7 @@ void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdCo
   b4.run();
   std::cout << tab << tab;
   b4.displayResults();
-  ss << "randomized svd : mgs conditioner," << MatrixTypeName<Head>::get() << ",";
+  ss << "randomized svd : mgs conditioner," << getMatrixTypeName<Head>() << ",";
   b4.pushAsCsv(ss);
   ss << std::endl;
 
@@ -62,7 +62,7 @@ void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdCo
   b5.run();
   std::cout << tab << tab;
   b5.displayResults();
-  ss << "randomized svd : qr conditioner," << MatrixTypeName<Head>::get() << ",";
+  ss << "randomized svd : qr conditioner," << getMatrixTypeName<Head>() << ",";
   b5.pushAsCsv(ss);
   ss << std::endl;
 

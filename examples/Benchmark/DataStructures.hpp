@@ -12,8 +12,8 @@
 namespace Benchmark {
 
 template <typename T> struct BenchStats {
-  T relativeApproximationError;
-  std::chrono::milliseconds runtime;
+  T relativeApproximationError{};
+  std::chrono::milliseconds runtime{};
 
   void display() const {
     std::cout << "Runtime " << runtime.count()
@@ -27,10 +27,10 @@ template <typename T> struct BenchStats {
 };
 
 struct RandomizedSvdConfig {
-  Eigen::Index rank;
-  Eigen::Index oversampling;
-  unsigned int numIter;
-  unsigned int prngSeed;
+  Eigen::Index rank{};
+  Eigen::Index oversampling{};
+  unsigned int numIter{};
+  unsigned int prngSeed{};
 
   void display() const {
     std::cout << "Randomized SVD rank " << rank << ", oversampling: " << oversampling
@@ -44,10 +44,10 @@ struct RandomizedSvdConfig {
 };
 
 struct BenchConfig {
-  Eigen::Index numCols;
-  Eigen::Index numRows;
-  Eigen::Index rank;
-  unsigned int prngSeed;
+  Eigen::Index numCols{};
+  Eigen::Index numRows{};
+  Eigen::Index rank{};
+  unsigned int prngSeed{};
 
   void display() const {
     std::cout << "Test matrix shape " << numCols << " x " << numRows

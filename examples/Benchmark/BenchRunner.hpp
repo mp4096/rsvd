@@ -48,8 +48,8 @@ template <typename MatrixType> class BenchRunnerSvd : public BenchRunnerBase<Mat
 public:
   explicit BenchRunnerSvd(const BenchConfig &benchConf) : BenchRunnerBase<MatrixType>(benchConf) {}
 
-  void run() {
     const auto tic = std::chrono::steady_clock::now();
+  void run() final {
     Eigen::JacobiSVD<MatrixType> svd(this->m_testMatrix,
                                      Eigen::ComputeThinU | Eigen::ComputeThinV);
     const auto toc = std::chrono::steady_clock::now();
@@ -63,7 +63,7 @@ public:
         Rsvd::relativeFrobeniusNormError(this->m_testMatrix, reconstructed);
   }
 
-  void pushAsCsv(std::stringstream &ss) const {
+  void pushAsCsv(std::stringstream &ss) const final {
     this->m_benchConfig.pushAsCsv(ss);
     ss << ",,,,,";
     this->m_stats.pushAsCsv(ss);
@@ -79,8 +79,8 @@ public:
   BenchRunnerRandomizedSvd(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdConf)
       : BenchRunnerBase<MatrixType>(benchConf), m_rsvdConfig(rsvdConf) {}
 
-  void run() {
     std::mt19937_64 randomEngine;
+  void run() final {
     randomEngine.seed(m_rsvdConfig.prngSeed);
 
     const auto tic = std::chrono::steady_clock::now();
@@ -98,7 +98,7 @@ public:
         Rsvd::relativeFrobeniusNormError(this->m_testMatrix, reconstructed);
   }
 
-  void pushAsCsv(std::stringstream &ss) const {
+  void pushAsCsv(std::stringstream &ss) const final {
     this->m_benchConfig.pushAsCsv(ss);
     ss << ",";
     this->m_rsvdConfig.pushAsCsv(ss);

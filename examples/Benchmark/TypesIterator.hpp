@@ -23,50 +23,60 @@ void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdCo
                  std::stringstream &ss) {
   std::cout << "Using numerical type " << getMatrixTypeName<Head>() << std::endl;
 
-  std::cout << kTab << "Jacobi SVD" << std::endl;
-  auto b1 = BenchRunnerSvd<Head>(benchConf);
-  b1.run();
-  std::cout << kTab << kTab;
-  b1.displayResults();
-  ss << "jacobi svd," << getMatrixTypeName<Head>() << ",";
-  b1.pushAsCsv(ss);
-  ss << std::endl;
+  {
+    std::cout << kTab << "Jacobi SVD" << std::endl;
+    auto b{BenchRunnerSvd<Head>(benchConf)};
+    b.run();
+    std::cout << kTab << kTab;
+    b.displayResults();
+    ss << "jacobi svd," << getMatrixTypeName<Head>() << ",";
+    b.pushAsCsv(ss);
+    ss << std::endl;
+  }
 
-  std::cout << kTab << "Randomized SVD, no conditioner" << std::endl;
-  auto b2 = BenchRunnerRandomizedSvd<Head, Rsvd::NoConditioner>(benchConf, rsvdConf);
-  b2.run();
-  std::cout << kTab << kTab;
-  b2.displayResults();
-  ss << "randomized svd : no conditioner," << getMatrixTypeName<Head>() << ",";
-  b2.pushAsCsv(ss);
-  ss << std::endl;
+  {
+    std::cout << kTab << "Randomized SVD, no conditioner" << std::endl;
+    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::NoConditioner>(benchConf, rsvdConf)};
+    b.run();
+    std::cout << kTab << kTab;
+    b.displayResults();
+    ss << "randomized svd : no conditioner," << getMatrixTypeName<Head>() << ",";
+    b.pushAsCsv(ss);
+    ss << std::endl;
+  }
 
-  std::cout << kTab << "Randomized SVD, LU conditioner" << std::endl;
-  auto b3 = BenchRunnerRandomizedSvd<Head, Rsvd::LuConditioner>(benchConf, rsvdConf);
-  b3.run();
-  std::cout << kTab << kTab;
-  b3.displayResults();
-  ss << "randomized svd : lu conditioner," << getMatrixTypeName<Head>() << ",";
-  b3.pushAsCsv(ss);
-  ss << std::endl;
+  {
+    std::cout << kTab << "Randomized SVD, LU conditioner" << std::endl;
+    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::LuConditioner>(benchConf, rsvdConf)};
+    b.run();
+    std::cout << kTab << kTab;
+    b.displayResults();
+    ss << "randomized svd : lu conditioner," << getMatrixTypeName<Head>() << ",";
+    b.pushAsCsv(ss);
+    ss << std::endl;
+  }
 
-  std::cout << kTab << "Randomized SVD, MGS conditioner" << std::endl;
-  auto b4 = BenchRunnerRandomizedSvd<Head, Rsvd::MgsConditioner>(benchConf, rsvdConf);
-  b4.run();
-  std::cout << kTab << kTab;
-  b4.displayResults();
-  ss << "randomized svd : mgs conditioner," << getMatrixTypeName<Head>() << ",";
-  b4.pushAsCsv(ss);
-  ss << std::endl;
+  {
+    std::cout << kTab << "Randomized SVD, MGS conditioner" << std::endl;
+    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::MgsConditioner>(benchConf, rsvdConf)};
+    b.run();
+    std::cout << kTab << kTab;
+    b.displayResults();
+    ss << "randomized svd : mgs conditioner," << getMatrixTypeName<Head>() << ",";
+    b.pushAsCsv(ss);
+    ss << std::endl;
+  }
 
-  std::cout << kTab << "Randomized SVD, QR conditioner" << std::endl;
-  auto b5 = BenchRunnerRandomizedSvd<Head, Rsvd::QrConditioner>(benchConf, rsvdConf);
-  b5.run();
-  std::cout << kTab << kTab;
-  b5.displayResults();
-  ss << "randomized svd : qr conditioner," << getMatrixTypeName<Head>() << ",";
-  b5.pushAsCsv(ss);
-  ss << std::endl;
+  {
+    std::cout << kTab << "Randomized SVD, QR conditioner" << std::endl;
+    auto b{BenchRunnerRandomizedSvd<Head, Rsvd::QrConditioner>(benchConf, rsvdConf)};
+    b.run();
+    std::cout << kTab << kTab;
+    b.displayResults();
+    ss << "randomized svd : qr conditioner," << getMatrixTypeName<Head>() << ",";
+    b.pushAsCsv(ss);
+    ss << std::endl;
+  }
 
   benchHelper<T, Tail...>(benchConf, rsvdConf, ss);
 }

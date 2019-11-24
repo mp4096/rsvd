@@ -7,13 +7,30 @@
 #include "rsvd/Constants.hpp"
 
 #include "BenchRunner.hpp"
-#include "HelperTraits.hpp"
 
 namespace Benchmark {
 
 namespace {
+
 constexpr auto kTab{"  "};
-}
+
+template <typename T> constexpr auto kMatrixTypeName{""};
+template <> constexpr auto kMatrixTypeName<Eigen::MatrixXf>{"float"};
+template <> constexpr auto kMatrixTypeName<Eigen::MatrixXd>{"double"};
+template <> constexpr auto kMatrixTypeName<Eigen::MatrixXcf>{"complex float"};
+template <> constexpr auto kMatrixTypeName<Eigen::MatrixXcd>{"complex double"};
+
+template <Rsvd::SubspaceIterationConditioner Conditioner> constexpr auto kConditionerName{""};
+template <>
+constexpr auto kConditionerName<Rsvd::SubspaceIterationConditioner::None>{"no conditioner"};
+template <>
+constexpr auto kConditionerName<Rsvd::SubspaceIterationConditioner::Mgs>{"MGS conditioner"};
+template <>
+constexpr auto kConditionerName<Rsvd::SubspaceIterationConditioner::Lu>{"LU conditioner"};
+template <>
+constexpr auto kConditionerName<Rsvd::SubspaceIterationConditioner::Qr>{"QR conditioner"};
+
+} // namespace
 
 template <typename MatrixType>
 void jacobiSvdRun(const BenchConfig &benchConf, std::stringstream &ss) {

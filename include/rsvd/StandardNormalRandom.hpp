@@ -53,7 +53,7 @@ struct StandardNormalRandomHelper<MatrixType, std::complex<RealType<MatrixType>>
     // A complex standard normal distribution has half of its variance in the real variable and
     // half in the complex. Hence, the each variance is 1/2 and each standard deviation is
     // 1/sqrt(2)
-    const RealType<MatrixType> stdDev = 1 / sqrt(2);
+    constexpr RealType<MatrixType> stdDev{0.707106781186547};
     std::normal_distribution<RealType<MatrixType>> distribution{0, stdDev};
     const auto complexNormal{[&](typename MatrixType::Scalar) {
       return std::complex<RealType<MatrixType>>(distribution(engine), distribution(engine));

@@ -36,12 +36,6 @@
 #include <rsvd/Constants.hpp>
 #include <rsvd/RandomizedRangeFinder.hpp>
 
-using Eigen::ComputeThinU;
-using Eigen::ComputeThinV;
-using Eigen::Index;
-using Eigen::JacobiSVD;
-using std::min;
-
 namespace Rsvd {
 
 /// \brief Randomized singular value decomposition.
@@ -116,24 +110,23 @@ public:
   /// the approximation. Default value: 5.
   /// \param numIter Number of randomized subspace iterations. Increase it to improve
   /// the approximation. Default value: 2.
-  void compute(const MatrixType &a, const Index rank, const Index oversamples = 5,
+  void compute(const MatrixType &a, const Eigen::Index rank, const Eigen::Index oversamples = 5,
                const unsigned int numIter = 2U) {
-    using Rsvd::Internal::RandomizedSubspaceIterations;
-    using Rsvd::Internal::singleShot;
-
     /// \todo Handle matrices with m < n correctly.
 
-    const Index matrixShortSize{min(a.rows(), a.cols())};
-    const Index rangeApproximationDim{min(matrixShortSize, rank + oversamples)};
+    const Eigen::Index matrixShortSize{std::min(a.rows(), a.cols())};
+    const Eigen::Index rangeApproximationDim{std::min(matrixShortSize, rank + oversamples)};
 
     const MatrixType q{
         (numIter == 0U)
-            ? singleShot<MatrixType, RandomEngineType>(a, rangeApproximationDim, m_randomEngine)
-            : RandomizedSubspaceIterations<MatrixType, RandomEngineType, Conditioner>::compute(
-                  a, rangeApproximationDim, numIter, m_randomEngine)};
+            ? Internal::singleShot<MatrixType, RandomEngineType>(a, rangeApproximationDim,
+                                                                 m_randomEngine)
+            : Internal::RandomizedSubspaceIterations<
+                  MatrixType, RandomEngineType, Conditioner>::compute(a, rangeApproximationDim,
+                                                                      numIter, m_randomEngine)};
 
     const auto b{q.adjoint() * a};
-    JacobiSVD<MatrixType> svd(b, ComputeThinU | ComputeThinV);
+    Eigen::JacobiSVD<MatrixType> svd(b, Eigen::ComputeThinU | Eigen::ComputeThinV);
 
     m_leftSingularVectors.noalias() = q * svd.matrixU().leftCols(rank);
     m_singularValues = svd.singularValues().head(rank);

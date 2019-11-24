@@ -5,8 +5,6 @@
 #include <algorithm>
 #include <limits>
 
-using Eigen::Index;
-
 namespace Rsvd {
 
 namespace Internal {
@@ -48,9 +46,9 @@ template <typename MatrixType> void modifiedGramSchmidt(MatrixType &a) {
   // If a matrix has fewer rows than columns then the columns are linearly dependent
   assert(a.cols() <= a.rows());
 
-  Index currCol;
+  Eigen::Index currCol;
   for (currCol = 0; currCol < a.cols(); ++currCol) {
-    for (Index prevCol{0}; prevCol < currCol; ++prevCol) {
+    for (Eigen::Index prevCol{0}; prevCol < currCol; ++prevCol) {
       /// \note Implementation detail: The order in the dot product is important for vectors over
       /// complex fields!
       a.col(currCol) -= a.col(prevCol).dot(a.col(currCol)) * a.col(prevCol);

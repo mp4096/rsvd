@@ -6,12 +6,6 @@
 #include <rsvd/GramSchmidt.hpp>
 #include <rsvd/StandardNormalRandom.hpp>
 
-using Eigen::ColPivHouseholderQR;
-using Eigen::FullPivLU;
-using Eigen::Index;
-using Eigen::Ref;
-using Eigen::StrictlyUpper;
-
 namespace Rsvd {
 
 namespace Internal {
@@ -32,15 +26,14 @@ namespace Internal {
 /// \return Matrix \f$ Q \in \mathbb{F}^{m \times r} \f$ whose columns build an orthonormal basis
 /// of the approximate range of \f$ A \f$.
 template <typename MatrixType, typename RandomEngineType>
-MatrixType singleShot(const MatrixType &a, const Index dim, RandomEngineType &engine) {
-  using Internal::standardNormalRandom;
+MatrixType singleShot(const MatrixType &a, const Eigen::Index dim, RandomEngineType &engine) {
 
   const auto numRows{a.rows()};
   const auto numCols{a.cols()};
 
   MatrixType result{a * standardNormalRandom<MatrixType, RandomEngineType>(numCols, dim, engine)};
 
-  ColPivHouseholderQR<Ref<MatrixType>> qr(result);
+  Eigen::ColPivHouseholderQR<Eigen::Ref<MatrixType>> qr(result);
   result.noalias() = qr.householderQ() * MatrixType::Identity(numRows, dim);
 
   return result;
@@ -66,7 +59,7 @@ struct RandomizedSubspaceIterations {
   ///
   /// \return Matrix \f$ Q \in \mathbb{F}^{m \times r} \f$ whose columns are an orthonormal basis
   /// of the approximate range of \f$ A \f$.
-  static MatrixType compute(const MatrixType &a, Index dim, unsigned int numIter,
+  static MatrixType compute(const MatrixType &a, Eigen::Index dim, unsigned int numIter,
                             RandomEngineType &engine);
 };
 
@@ -74,10 +67,8 @@ struct RandomizedSubspaceIterations {
 template <typename MatrixType, typename RandomEngineType>
 struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
                                     SubspaceIterationConditioner::None> {
-  static MatrixType compute(const MatrixType &a, const Index dim, const unsigned int numIter,
-                            RandomEngineType &engine) {
-    using Internal::standardNormalRandom;
-
+  static MatrixType compute(const MatrixType &a, const Eigen::Index dim,
+                            const unsigned int numIter, RandomEngineType &engine) {
     assert(numIter > 0);
 
     const auto numRows{a.rows()};
@@ -92,7 +83,7 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
       tmpRows.noalias() = a * tmpCols;
     }
 
-    ColPivHouseholderQR<Ref<MatrixType>> qr(tmpRows);
+    Eigen::ColPivHouseholderQR<Eigen::Ref<MatrixType>> qr(tmpRows);
     tmpRows.noalias() = qr.householderQ() * MatrixType::Identity(numRows, dim);
 
     return tmpRows;
@@ -110,10 +101,8 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
 template <typename MatrixType, typename RandomEngineType>
 struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
                                     SubspaceIterationConditioner::Lu> {
-  static MatrixType compute(const MatrixType &a, const Index dim, const unsigned int numIter,
-                            RandomEngineType &engine) {
-    using Internal::standardNormalRandom;
-
+  static MatrixType compute(const MatrixType &a, const Eigen::Index dim,
+                            const unsigned int numIter, RandomEngineType &engine) {
     assert(numIter > 0);
 
     const auto numRows{a.rows()};
@@ -124,21 +113,21 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
 
     for (unsigned int j{0U}; j < numIter; ++j) {
       tmpRows.noalias() = a * tmpCols;
-      FullPivLU<Ref<MatrixType>> luRows(tmpRows);
+      Eigen::FullPivLU<Eigen::Ref<MatrixType>> luRows(tmpRows);
       tmpRows.diagonal().setOnes();
-      tmpRows.template triangularView<StrictlyUpper>().setZero();
+      tmpRows.template triangularView<Eigen::StrictlyUpper>().setZero();
 
       tmpCols.noalias() = a.adjoint() * luRows.permutationP().inverse() * tmpRows;
-      FullPivLU<Ref<MatrixType>> luCols(tmpCols);
+      Eigen::FullPivLU<Eigen::Ref<MatrixType>> luCols(tmpCols);
       tmpCols.diagonal().setOnes();
-      tmpCols.template triangularView<StrictlyUpper>().setZero();
+      tmpCols.template triangularView<Eigen::StrictlyUpper>().setZero();
 
       /// \todo Can we avoid intermediate allocation here?
       tmpCols = luCols.permutationP().inverse() * tmpCols;
     }
 
     tmpRows.noalias() = a * tmpCols;
-    ColPivHouseholderQR<Ref<MatrixType>> qr(tmpRows);
+    Eigen::ColPivHouseholderQR<Eigen::Ref<MatrixType>> qr(tmpRows);
     tmpRows.noalias() = qr.householderQ() * MatrixType::Identity(numRows, dim);
 
     return tmpRows;
@@ -150,11 +139,8 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
 template <typename MatrixType, typename RandomEngineType>
 struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
                                     SubspaceIterationConditioner::Mgs> {
-  static MatrixType compute(const MatrixType &a, const Index dim, const unsigned int numIter,
-                            RandomEngineType &engine) {
-    using Internal::modifiedGramSchmidt;
-    using Internal::standardNormalRandom;
-
+  static MatrixType compute(const MatrixType &a, const Eigen::Index dim,
+                            const unsigned int numIter, RandomEngineType &engine) {
     assert(numIter > 0);
 
     const auto numRows{a.rows()};
@@ -172,7 +158,7 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
     }
 
     tmpRows.noalias() = a * tmpCols;
-    ColPivHouseholderQR<Ref<MatrixType>> qr(tmpRows);
+    Eigen::ColPivHouseholderQR<Eigen::Ref<MatrixType>> qr(tmpRows);
     tmpRows.noalias() = qr.householderQ() * MatrixType::Identity(numRows, dim);
 
     return tmpRows;
@@ -184,10 +170,8 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
 template <typename MatrixType, typename RandomEngineType>
 struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
                                     SubspaceIterationConditioner::Qr> {
-  static MatrixType compute(const MatrixType &a, const Index dim, const unsigned int numIter,
-                            RandomEngineType &engine) {
-    using Internal::standardNormalRandom;
-
+  static MatrixType compute(const MatrixType &a, const Eigen::Index dim,
+                            const unsigned int numIter, RandomEngineType &engine) {
     assert(numIter > 0);
 
     const auto numRows{a.rows()};
@@ -198,15 +182,15 @@ struct RandomizedSubspaceIterations<MatrixType, RandomEngineType,
 
     for (unsigned int j{0U}; j < numIter; ++j) {
       tmpRows.noalias() = a * tmpCols;
-      ColPivHouseholderQR<Ref<MatrixType>> qrRows(tmpRows);
+      Eigen::ColPivHouseholderQR<Eigen::Ref<MatrixType>> qrRows(tmpRows);
 
       tmpCols.noalias() = a.adjoint() * qrRows.householderQ();
-      ColPivHouseholderQR<Ref<MatrixType>> qrCols(tmpCols);
+      Eigen::ColPivHouseholderQR<Eigen::Ref<MatrixType>> qrCols(tmpCols);
       tmpCols.noalias() = qrCols.householderQ() * MatrixType::Identity(numCols, dim);
     }
 
     tmpRows.noalias() = a * tmpCols;
-    ColPivHouseholderQR<Ref<MatrixType>> qr(tmpRows);
+    Eigen::ColPivHouseholderQR<Eigen::Ref<MatrixType>> qr(tmpRows);
     tmpRows.noalias() = qr.householderQ() * MatrixType::Identity(numRows, dim);
 
     return tmpRows;

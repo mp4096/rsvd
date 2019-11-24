@@ -6,17 +6,17 @@
 #include <complex>
 #include <random>
 
-using Eigen::Index;
-
 namespace Rsvd {
 
 namespace Internal {
 
+namespace {
 /// \brief Shortcut for the underlying \a real type used in the matrix.
 ///
 /// \long E.g. if the matrix is of type \c std::complex<double>, this typedef equals to \c double.
 template <typename MatrixType>
 using RealType = typename Eigen::NumTraits<typename MatrixType::Scalar>::Real;
+} // namespace
 
 /// \brief Helper struct to do partial specialization in the matrix scalar type
 ///
@@ -28,13 +28,14 @@ using RealType = typename Eigen::NumTraits<typename MatrixType::Scalar>::Real;
 /// std::mt19937_64.
 template <typename MatrixType, typename ScalarType, typename RandomEngineType>
 struct StandardNormalRandomHelper {
-  static inline MatrixType generate(Index numRows, Index numCols, RandomEngineType &engine);
+  static inline MatrixType generate(Eigen::Index numRows, Eigen::Index numCols,
+                                    RandomEngineType &engine);
 };
 
 /// \brief Partial specialization for real matrices.
 template <typename MatrixType, typename RandomEngineType>
 struct StandardNormalRandomHelper<MatrixType, RealType<MatrixType>, RandomEngineType> {
-  static inline MatrixType generate(const Index numRows, const Index numCols,
+  static inline MatrixType generate(const Eigen::Index numRows, const Eigen::Index numCols,
                                     RandomEngineType &engine) {
     // Create a standard normal distribution with zero mean (mu = 0) and unity variance (sigma^2 =
     // 1)
@@ -48,7 +49,7 @@ struct StandardNormalRandomHelper<MatrixType, RealType<MatrixType>, RandomEngine
 template <typename MatrixType, typename RandomEngineType>
 struct StandardNormalRandomHelper<MatrixType, std::complex<RealType<MatrixType>>,
                                   RandomEngineType> {
-  static inline MatrixType generate(const Index numRows, const Index numCols,
+  static inline MatrixType generate(const Eigen::Index numRows, const Eigen::Index numCols,
                                     RandomEngineType &engine) {
     // A complex standard normal distribution has half of its variance in the real variable and
     // half in the complex. Hence, the each variance is 1/2 and each standard deviation is
@@ -81,7 +82,7 @@ struct StandardNormalRandomHelper<MatrixType, std::complex<RealType<MatrixType>>
 /// \return Matrix \f$ \Omega \in \mathbb{F}^{m \times n} \f$ with \f$\mathbb{F} \in \{ \mathbb{R},
 /// \mathbb{C} \} \f$ with normally distributed elements.
 template <typename MatrixType, typename RandomEngineType>
-inline MatrixType standardNormalRandom(const Index numRows, const Index numCols,
+inline MatrixType standardNormalRandom(const Eigen::Index numRows, const Eigen::Index numCols,
                                        RandomEngineType &engine) {
   return StandardNormalRandomHelper<MatrixType, typename MatrixType::Scalar,
                                     RandomEngineType>::generate(numRows, numCols, engine);

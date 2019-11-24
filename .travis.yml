@@ -1,30 +1,26 @@
 language: cpp
-dist: trusty
+dist: bionic
 
 matrix:
   include:
     - os: linux
       addons:
         apt:
-          sources:
-            - ubuntu-toolchain-r-test
           packages:
-            - g++-5
+            - g++-8
       env:
-        - CC_=gcc-5
-        - CXX_=g++-5
+        - CC_=gcc-8
+        - CXX_=g++-8
     - os: linux
       addons:
         apt:
           sources:
-            - llvm-toolchain-trusty-5.0
-            - ubuntu-toolchain-r-test
+            - llvm-toolchain-bionic-9
           packages:
-            - clang-5.0
-            - g++-5
+            - clang-9
       env:
-        - CC_=clang-5.0
-        - CXX_=clang++-5.0
+        - CC_=clang-9
+        - CXX_=clang++-9
 
 before_install:
   - export CC=$CC_

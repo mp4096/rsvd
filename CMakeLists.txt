@@ -37,7 +37,7 @@ include_directories(
 )
 
 # Flags
-set(CMAKE_CXX_FLAGS "-Wall -Wextra -pedantic -g")
+set(CMAKE_CXX_FLAGS "-Wall -Wextra -Wpedantic -Werror -g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2 -DEIGEN_NO_DEBUG")
 
 # Examples

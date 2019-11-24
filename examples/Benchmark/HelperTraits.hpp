@@ -6,36 +6,21 @@
 
 namespace Benchmark {
 
-template <typename T> inline constexpr auto getMatrixTypeName() noexcept;
-template <> inline constexpr auto getMatrixTypeName<Eigen::MatrixXf>() noexcept { return "float"; }
-template <> inline constexpr auto getMatrixTypeName<Eigen::MatrixXd>() noexcept {
-  return "double";
-}
-template <> inline constexpr auto getMatrixTypeName<Eigen::MatrixXcf>() noexcept {
-  return "complex float";
-}
-template <> inline constexpr auto getMatrixTypeName<Eigen::MatrixXcd>() noexcept {
-  return "complex double";
-}
+template <typename T> constexpr auto kMatrixTypeName{""};
+template <> constexpr auto kMatrixTypeName<Eigen::MatrixXf>{"float"};
+template <> constexpr auto kMatrixTypeName<Eigen::MatrixXd>{"double"};
+template <> constexpr auto kMatrixTypeName<Eigen::MatrixXcf>{"complex float"};
+template <> constexpr auto kMatrixTypeName<Eigen::MatrixXcd>{"complex double"};
 
-template <Rsvd::SubspaceIterationConditioner Conditioner>
-inline constexpr auto getConditionerName() noexcept;
+template <Rsvd::SubspaceIterationConditioner Conditioner> constexpr auto kConditionerName{""};
 template <>
-inline constexpr auto getConditionerName<Rsvd::SubspaceIterationConditioner::None>() noexcept {
-  return "no conditioner";
-}
+constexpr auto kConditionerName<Rsvd::SubspaceIterationConditioner::None>{"no conditioner"};
 template <>
-inline constexpr auto getConditionerName<Rsvd::SubspaceIterationConditioner::Mgs>() noexcept {
-  return "MGS conditioner";
-}
+constexpr auto kConditionerName<Rsvd::SubspaceIterationConditioner::Mgs>{"MGS conditioner"};
 template <>
-inline constexpr auto getConditionerName<Rsvd::SubspaceIterationConditioner::Lu>() noexcept {
-  return "LU conditioner";
-}
+constexpr auto kConditionerName<Rsvd::SubspaceIterationConditioner::Lu>{"LU conditioner"};
 template <>
-inline constexpr auto getConditionerName<Rsvd::SubspaceIterationConditioner::Qr>() noexcept {
-  return "QR conditioner";
-}
+constexpr auto kConditionerName<Rsvd::SubspaceIterationConditioner::Qr>{"QR conditioner"};
 
 } // namespace Benchmark
 

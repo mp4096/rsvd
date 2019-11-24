@@ -22,7 +22,7 @@ void jacobiSvdRun(const BenchConfig &benchConf, std::stringstream &ss) {
   b.run();
   std::cout << kTab << kTab;
   b.displayResults();
-  ss << "jacobi svd," << getMatrixTypeName<MatrixType>() << ",";
+  ss << "jacobi svd," << kMatrixTypeName<MatrixType> << ",";
   b.pushAsCsv(ss);
   ss << std::endl;
 }
@@ -30,13 +30,13 @@ void jacobiSvdRun(const BenchConfig &benchConf, std::stringstream &ss) {
 template <typename MatrixType, Rsvd::SubspaceIterationConditioner Conditioner>
 void randomizedSvdRun(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdConf,
                       std::stringstream &ss) {
-  std::cout << kTab << "Randomized SVD, " << getConditionerName<Conditioner>() << std::endl;
+  std::cout << kTab << "Randomized SVD, " << kConditionerName<Conditioner> << std::endl;
   auto b{BenchRunnerRandomizedSvd<MatrixType, Conditioner>(benchConf, rsvdConf)};
   b.run();
   std::cout << kTab << kTab;
   b.displayResults();
-  ss << "randomized svd : " << getConditionerName<Conditioner>() << ","
-     << getMatrixTypeName<MatrixType>() << ",";
+  ss << "randomized svd : " << kConditionerName<Conditioner> << ","
+     << kMatrixTypeName<MatrixType> << ",";
   b.pushAsCsv(ss);
   ss << std::endl;
 }
@@ -47,7 +47,7 @@ void benchHelper(const BenchConfig &, const RandomizedSvdConfig &, std::stringst
 template <typename T, typename Head, typename... Tail>
 void benchHelper(const BenchConfig &benchConf, const RandomizedSvdConfig &rsvdConf,
                  std::stringstream &ss) {
-  std::cout << "Using numerical type " << getMatrixTypeName<Head>() << std::endl;
+  std::cout << "Using numerical type " << kMatrixTypeName<Head> << std::endl;
 
   jacobiSvdRun<Head>(benchConf, ss);
   randomizedSvdRun<Head, Rsvd::SubspaceIterationConditioner::None>(benchConf, rsvdConf, ss);

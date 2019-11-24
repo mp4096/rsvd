@@ -53,7 +53,7 @@ TYPED_TEST(RandomizedRangeFinder, SingleShotNorm) {
       a, TestFixture::dim + TestFixture::oversampling, randomEngine);
 
   for (Index i = 0; i < TestFixture::dim; ++i) {
-    ASSERT_NEAR(q.col(i).norm(), 1, 2 * TestFixture::macheps);
+    ASSERT_NEAR(q.col(i).norm(), 1, 3 * TestFixture::macheps);
   }
 }
 

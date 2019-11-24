@@ -43,7 +43,7 @@ TYPED_TEST(RandomizedSvd, ExactRankApproximationNoConditioner) {
       rsvd.matrixU() * rsvd.singularValues().asDiagonal() * rsvd.matrixV().adjoint();
   const auto relErrRsvd = Rsvd::relativeFrobeniusNormError(m, reconstructedRsvd);
 
-  ASSERT_LE(relErrRsvd, 1.15 * relErrSvd);
+  ASSERT_LE(relErrRsvd, 1.30 * relErrSvd);
 }
 
 TYPED_TEST(RandomizedSvd, ExactRankApproximationLuConditioner) {

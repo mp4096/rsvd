@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 ifeq ($(TOOLCHAIN),)
-TOOLCHAIN := CC=clang-6.0 CXX=clang++-6.0
+TOOLCHAIN := CC=clang-8 CXX=clang++-8
 endif
 
 eigen_version := 3.3.5
